@@ -33,12 +33,12 @@
         </div>
     </section>
 
-     <!-- Meeting Modal -->
-     <div id="meetingModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+    <!-- Meeting Modal -->
+    <div id="meetingModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded shadow-lg w-80">
             <h3 class="text-xl font-semibold mb-2" id="meetingTitle">Meeting Details</h3>
             <p id="meetingTime" class="mb-4">Time: 5:00 PM</p>
-            <button onclick="closeModal()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500">Close</button>
+            <button onclick="closeModal()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">Close</button>
         </div>
     </div>
 
@@ -129,20 +129,26 @@
         // Initialize the date
         let currentDate = new Date();
 
-        // Function to render the calendar
+         // Object storing meeting details with date keys
+         const meetingData = {
+            '2023-11-15': { title: 'General Club Meeting', time: '5:00 PM' },
+            '2023-11-22': { title: 'Project Planning Session', time: '5:00 PM' },
+            '2023-12-01': { title: 'End of Semester Presentation', time: '4:30 PM' }
+            // Add more dates as needed
+        };
+
+        // Render the calendar
         function renderCalendar() {
             const monthYear = document.getElementById('monthYear');
             const calendarDisplay = document.getElementById('calendarDisplay');
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             const daysInWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
             
-            // Clear previous calendar cells
+            // Clear previous cells
             calendarDisplay.innerHTML = "";
-
-            // Display current month and year
             monthYear.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 
-            // Render the day headers
+            // Render day headers
             daysInWeek.forEach(day => {
                 const dayElement = document.createElement('div');
                 dayElement.classList.add('font-bold', 'text-blue-700');
@@ -150,34 +156,35 @@
                 calendarDisplay.appendChild(dayElement);
             });
 
-            // Get the first and last day of the current month
             const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
             const lastDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
 
-            // Add blank cells for days of the previous month
+            // Add blank cells
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('div');
                 calendarDisplay.appendChild(emptyCell);
             }
 
-            // Render each day in the current month
+            // Render each day of the current month
             for (let date = 1; date <= lastDate; date++) {
                 const dateElement = document.createElement('div');
                 dateElement.classList.add('p-2', 'rounded-lg', 'bg-gray-100', 'hover:bg-blue-200', 'cursor-pointer');
                 dateElement.textContent = date;
 
-                // Highlight specific meeting dates (e.g., every Wednesday)
-                const dayOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), date).getDay();
-                if (dayOfWeek === 3) { // 3 is Wednesday
+                const dateKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+
+                // Highlight if a meeting exists for this date
+                if (meetingData[dateKey]) {
                     dateElement.classList.add('bg-green-300', 'font-bold');
-                    dateElement.title = 'Weekly Meeting';
+                    dateElement.onclick = () => openModal(meetingData[dateKey].title, meetingData[dateKey].time);
+                } else {
+                    dateElement.onclick = () => openModal("No Meeting Scheduled", "");
                 }
 
                 calendarDisplay.appendChild(dateElement);
             }
         }
 
-        // Functions to navigate months
         document.getElementById('prevMonth').onclick = () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
             renderCalendar();
@@ -191,7 +198,7 @@
         // Modal control functions
         function openModal(title, time) {
             document.getElementById('meetingTitle').textContent = title;
-            document.getElementById('meetingTime').textContent = time;
+            document.getElementById('meetingTime').textContent = time ? `Time: ${time}` : "No time set";
             document.getElementById('meetingModal').classList.remove('hidden');
         }
 
@@ -207,8 +214,9 @@
             link.click();
         }
 
-        // Initial render
+        // Initial Render
         renderCalendar();
+
     </script>
 </body>
 </html>
