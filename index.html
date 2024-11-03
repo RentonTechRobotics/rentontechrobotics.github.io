@@ -33,17 +33,85 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
+     <!-- Meeting Modal -->
+     <div id="meetingModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-80">
+            <h3 class="text-xl font-semibold mb-2" id="meetingTitle">Meeting Details</h3>
+            <p id="meetingTime" class="mb-4">Time: 5:00 PM</p>
+            <button onclick="closeModal()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500">Close</button>
+        </div>
+    </div>
+
+    <!-- Projects Section with Table Structure -->
     <section id="projects" class="container mx-auto my-10 p-6 bg-white shadow rounded-lg">
         <h2 class="text-3xl font-bold mb-4">Current & Proposed Projects</h2>
-        <ul class="space-y-3">
-            <li class="p-4 bg-gray-100 rounded">Project 1: Autonomous Drone</li>
-            <li class="p-4 bg-gray-100 rounded">Project 2: Robotic Arm</li>
-            <li class="p-4 bg-gray-100 rounded">Project 3: Machine Learning Rover</li>
-            <!-- Add more projects as needed -->
-        </ul>
+        <table class="w-full table-auto">
+            <thead>
+                <tr class="bg-gray-200 text-left">
+                    <th class="px-4 py-2">Project Name</th>
+                    <th class="px-4 py-2">Members</th>
+                    <th class="px-4 py-2">Project Page</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-t">
+                    <td class="px-4 py-2">Autonomous Drone</td>
+                    <td class="px-4 py-2">John Doe, Jane Smith</td>
+                    <td class="px-4 py-2">
+                        <a href="projects/autonomous_drone.html" class="text-blue-500 hover:underline">View Details</a>
+                    </td>
+                </tr>
+                <tr class="border-t">
+                    <td class="px-4 py-2">Robotic Arm</td>
+                    <td class="px-4 py-2">Carlos Martinez, Priya Patel</td>
+                    <td class="px-4 py-2">
+                        <a href="projects/robotic_arm.html" class="text-blue-500 hover:underline">View Details</a>
+                    </td>
+                </tr>
+                <tr class="border-t">
+                    <td class="px-4 py-2">Machine Learning Rover</td>
+                    <td class="px-4 py-2">Liam Nguyen, Emily Chen</td>
+                    <td class="px-4 py-2">
+                        <a href="projects/machine_learning_rover.html" class="text-blue-500 hover:underline">View Details</a>
+                    </td>
+                </tr>
+                <!-- Add additional rows as needed -->
+            </tbody>
+        </table>
+        <button onclick="downloadProposalTemplate()" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-green-500">Propose a Project</button>
     </section>
-
+    
+    <!-- Completed Projects Section with Table Structure -->
+    <section id="completed-projects" class="container mx-auto my-10 p-6 bg-white shadow rounded-lg">
+        <h2 class="text-3xl font-bold mb-4">Completed Projects</h2>
+        <table class="w-full table-auto">
+            <thead>
+                <tr class="bg-gray-200 text-left">
+                    <th class="px-4 py-2">Project Name</th>
+                    <th class="px-4 py-2">Members</th>
+                    <th class="px-4 py-2">Project Page</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-t">
+                    <td class="px-4 py-2">Robotic Arm Prototype</td>
+                    <td class="px-4 py-2">Sarah Kim, Marcus Lopez</td>
+                    <td class="px-4 py-2">
+                        <a href="projects/robotic_arm_prototype.html" class="text-blue-500 hover:underline">View Details</a>
+                    </td>
+                </tr>
+                <tr class="border-t">
+                    <td class="px-4 py-2">Vision-Guided Rover</td>
+                    <td class="px-4 py-2">John Doe, Emily Chen</td>
+                    <td class="px-4 py-2">
+                        <a href="projects/vision_guided_rover.html" class="text-blue-500 hover:underline">View Details</a>
+                    </td>
+                </tr>
+                <!-- Add additional rows as needed -->
+            </tbody>
+        </table>
+    </section>
+    
     <!-- Contact Section -->
     <section id="contact" class="container mx-auto my-10 p-6 bg-white shadow rounded-lg">
         <h2 class="text-3xl font-bold mb-4">Contact Information</h2>
@@ -52,17 +120,6 @@
             <li class="p-4 bg-gray-100 rounded">Jack Newby - Vice-President - jnewby@student.rtc.edu</li>
             <li class="p-4 bg-gray-100 rounded">Isaac Alschitz - Treasurer - ialschitz@student.rtc.edu</li>
         </ul>
-    </section>
-
-    <!-- Completed Projects Section -->
-    <section id="completed-projects" class="container mx-auto my-10 p-6 bg-white shadow rounded-lg">
-        <h2 class="text-3xl font-bold mb-4">Completed Projects</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            <div class="p-4 bg-gray-100 rounded">Completed Project 1: Robotic Arm</div>
-            <div class="p-4 bg-gray-100 rounded">Completed Project 2: Smart Cart</div>
-            <div class="p-4 bg-gray-100 rounded">Completed Project 3: Vision-Guided Rover</div>
-            <!-- Additional completed projects as needed -->
-        </div>
     </section>
 
     <!-- JavaScript for Calendar Functionality -->
@@ -130,6 +187,25 @@
             currentDate.setMonth(currentDate.getMonth() + 1);
             renderCalendar();
         };
+
+        // Modal control functions
+        function openModal(title, time) {
+            document.getElementById('meetingTitle').textContent = title;
+            document.getElementById('meetingTime').textContent = time;
+            document.getElementById('meetingModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('meetingModal').classList.add('hidden');
+        }
+
+        // Download function for project proposal template
+        function downloadProposalTemplate() {
+            const link = document.createElement('a');
+            link.href = 'https://example.com/path/to/project_proposal_template.pdf'; // Update with actual PDF file link
+            link.download = 'Project_Proposal_Template.pdf';
+            link.click();
+        }
 
         // Initial render
         renderCalendar();
